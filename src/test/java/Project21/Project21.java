@@ -29,7 +29,7 @@ public class Project21 {
     Password:  TechnoStudy123@
     */
     @BeforeClass
-    public void setUp() {
+    public void setUp() throws Exception {
 
         RestAssured.baseURI = "https://test.campus.techno.study";
 
@@ -87,6 +87,7 @@ active: (true)*/
         String id = response.statusCode(201).extract().jsonPath().getString("id");
         idsForCleanUp.add(id);
     }
+
     @Test
     public void DuplicateDiscount(){
 
@@ -109,6 +110,7 @@ active: (true)*/
                         containsString("already exists"))
                 );
     }
+
     @Test
     public void EditDiscount(){
         HashMap<String,String> editedBody = new HashMap<>();
@@ -127,7 +129,8 @@ active: (true)*/
                 .body("description",equalTo(editedBody.get("description")));
 
     }
-    @Test
+
+    @Test(dependsOnMethods = "CreateDiscount")
     public void DeleteDiscount(){
 
         given()
@@ -138,6 +141,7 @@ active: (true)*/
                 .statusCode(200);
         idsForCleanUp.remove(0);
     }
+
     @Test
     public void DeleteDiscountAgain(){
 
@@ -189,7 +193,7 @@ schoolId: (" 5c5aa8551ad17423a4f6ef1d ")
 
     }
 
-    @Test
+    @Test(dependsOnMethods = "CreateNotification")
     public void DuplicateNotification(){
 
         HashMap<String, String> duplicateBody = new HashMap<>();
